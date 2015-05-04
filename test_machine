@@ -1,4 +1,4 @@
 start 1
-success [1, 3]
+success [3]
 terminal [4, 5]
 transitions {"0": [["a", 1]], "1": [["b", 4], ["a", 2]], "2": [["c", 1], ["b", 4]]}
