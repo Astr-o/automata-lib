@@ -1,7 +1,3 @@
-import sys
-import json
-
-
 class StateMachine(object):
 
     def __init__(self, start, success, terminal, transitions):
@@ -43,14 +39,6 @@ class StateMachine(object):
 
 
 class Step(object):
-
-    @staticmethod
-    def print_step_list(steps):
-        line = 1
-        for step in steps:
-            print "%d) %s" % (line, str(step))
-            line += 1
-
     def __init__(self, init_state, symbol, final_state):
         self.init_state = init_state
         self.symbol = symbol
