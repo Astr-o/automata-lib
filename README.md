@@ -1,27 +1,30 @@
-# Automata-core Library #
+# automata-lib Library 
 
 Simple finite state automata library providing:
 
-* FSA parser
-* FSA simulator
-* FSA graph model
+* FSA parser (*partially complete*)
+* FSA simulator 
+* FSA graph model (*early stage*)
 * Basic command line interface
 
-## Installation #
+## Installation 
 
 Requires Python 2.7+, not tested with Python 3
 
-To use in your projects imply include `/automata-core-lib` in your python module path
+To use in your projects simply include `/automata-core-lib` in your python module path
 
-## Usage #
+## Usage 
 	
 From your command prompt with python configured run
 
 	python automata-cli.py [machine_file] [strings]
 
 
-machine_file - supported descripton file
-strings - space seperated list of strings to test on machine
+`machine_file` - supported descripton file
+
+`strings` - space seperated list of strings to test on machine
+
+### Example Files 
 
 Look in `/examples` for example fsa description files.
 
