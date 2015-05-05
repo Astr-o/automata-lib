@@ -3,7 +3,8 @@ import json
 from statemachine import Step, StateMachine, PlainTextParser, SyntexException
 
 
-def show_usage():
+
+def print_usage():
     print "python statemachine.py [filename] [strings]"
 
 
@@ -70,38 +71,61 @@ def test(tests, machine):
     print str((total - failed)) + "/" + str(total) + " Tests Passed"
 
 
-def print_results(string, steps, result):
+def print_machine_description(name, start, success, transitions, extended=False):
     print "#####################################################"
-    print "Test String: %s " % (string,)
+    print " MACHINE:         %s " % (str(name),)
+    print " START STATE:     %s " % (str(start),)
+    print " ACCEPTOR STATES: %s " % (str(success),)
+    print " TRANSITIONS:     %s " % (str(transitions),)
+    if extended:
+        pass
+    print "#####################################################"
+
+
+def print_results(string, steps, result, final_state):
+    if result:
+        accept = " Yes!"
+    else:
+        accept = " No!"
+
+    print "#####################################################"
+    print " Test String:    %s " % (string,)
     for (index, step) in enumerate(steps):
-        print "%d) %s" % (index, str(step))
-    print "Result: %s" % (str(result),)
+        print "    %d %s" % (index, str(step))
+    print " Final State:    %s " % (str(final_state),)
+    print " Accept?:        %s " % (str(accept),)
     print "#####################################################"
 
 
 def main(argv):
 
     if len(argv) > 1:
-        print "Description File: %s" % (argv[0])
+
+        filepath = argv[0]
+
+        #print "Description File: %s" % (filepath)
 
         #tests = [("aaa", False), ("accc", True)]
 
-        machine = parse_text_file(argv[0])
+        machine = parse_text_file(filepath)
 
         if machine is None:
             print "Process Terminated: Could not parse autonama file"
             return
 
+        print_machine_description(
+            filepath, machine.start, machine.success, machine.transitions)
+
         for string in argv[1:]:
-            (result, steps) = machine.evaluate(string)
-            print_results(string, steps, result)
+            (result, final_state, steps) = machine.evaluate(string)
+            print_results(string, steps, result, final_state)
             savecsv(string, steps, result, "testfile.csv", True)
         #test(tests, machine)
 
         # dump_machine(machine)
 
     else:
-        show_usage()
+        print_usage()
 
 if __name__ == "__main__":
     main(sys.argv[1:])

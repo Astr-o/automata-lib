@@ -1,7 +1,6 @@
-START 0
-SUCCESS 2, 3
+START FirstState
+SUCCESS Wining, Not Lossing
 RULES
-# 0 : a : 2
-# 0 : b : 3
-# 0 : c : 1
+# FirstState : a : Wining
+# FirstState : b : Loose
 ENDRULES

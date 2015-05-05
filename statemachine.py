@@ -4,8 +4,8 @@ class SyntexException(Exception):
 
     ''' raised when parser finds unexpected syntex in string '''
 
-    def __init__(self, message, line_number, line):
-        message = "Syntex Error: unknown line type \n  (%d) - %s \n" % (
+    def __init__(self, line_number, line):
+        message = "Syntex Error: unknown line type in input string \n    line %d - %s \n" % (
             line_number, line)
         super(Exception, self).__init__(message)
         self.line_number = line_number
@@ -99,8 +99,8 @@ class PlainTextParser(object):
             else:
                 content_string = (strings[1].replace(" ", ""))
 
-            print "Parsing: %s" % (line,)
-            print "(%s,%s)" % (type_string, content_string)
+            # print "Parsing: %s" % (line,)
+            # print "(%s,%s)" % (type_string, content_string)
 
             if (type_string in self.parser_dict.keys()):
                 tokens.append((type_string, content_string))
@@ -117,6 +117,7 @@ class PlainTextParser(object):
 
 
 class StateMachine(object):
+
     """ 
         StateMachine object simulates a FSA 
 
@@ -124,6 +125,7 @@ class StateMachine(object):
         success - list of acceptor states
         transitions - dictionary { s1 : [(symb, s2)] }  
     """
+
     def __init__(self, start, success, transitions):
         self.start = start
         self.success = success
@@ -178,19 +180,20 @@ class StateMachine(object):
             self.steps.append(step_result)
 
         if self.state in self.success:
-            return (True, self.steps)
+            return (True, self.state, self.steps)
         else:
-            return (False, self.steps)
+            return (False, self.state, self.steps)
 
 
 class Step(object):
+
     ''' 
         Step object represents one FSM state transition
 
         init_state  - state before input symbol
         symbol      - input symbol
         final_state - state after transition
-    ''' 
+    '''
 
     def __init__(self, init_state, symbol, final_state):
         self.init_state = init_state
