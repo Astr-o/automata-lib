@@ -21,12 +21,6 @@ def savecsv(string, steps, result, filepath, append):
     f.write("Result:, %s \n" % (str(result),))
 
 
-def print_step_list(steps):
-    line = 1
-    for step in steps:
-        print "%d) %s" % (line, str(step))
-        line += 1
-
 
 def dump_machine(machine):
     print(json.dumps(machine.state))
@@ -94,7 +88,8 @@ def test(tests, machine):
 def print_results(string, steps, result):
     print "#####################################################"
     print "Test String: %s " % (string,)
-    print_step_list(steps)
+    for (index, step) in enumerate(steps):
+        print "%d) %s" % (index, str(step))
     print "Result: %s" % (str(result),)
     print "#####################################################"
 
