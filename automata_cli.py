@@ -1,6 +1,6 @@
 import sys
 import json
-from statemachine import Step, StateMachine
+from statemachine import Step, StateMachine, PlainTextParser, SyntexException
 
 
 def show_usage():
@@ -21,7 +21,6 @@ def savecsv(string, steps, result, filepath, append):
     f.write("Result:, %s \n" % (str(result),))
 
 
-
 def dump_machine(machine):
     print(json.dumps(machine.state))
     print(json.dumps(machine.success))
@@ -37,31 +36,17 @@ def parse_text_file(filepath):
         print e
         return None
 
-    line = input_file.readline()
+    content = input_file.read()
 
-    line_types = ["start", "success", "terminal", "transitions"]
-    parsed = {}
-    line_count = 0
+    parser = PlainTextParser()
 
-    while line:
-        line_count += 1
+    try:
+        machine = parser.parse(content)
+    except SyntexException, e:
+        print e
+        return None
 
-        line.strip()
-        tokens = line.split(" ", 1)
-        line_type = tokens[0]
-        line_json = tokens[1]
-
-        line_type.lower()
-
-        if line_type in line_types:
-            parsed[line_type] = json.loads(line_json)
-        else:
-            print "Unknown line: " + str(line_count) + "  " + line.replace('\n', ' ')
-            return None
-
-        line = input_file.readline()
-
-    return parsed
+    return machine
 
 
 def test(tests, machine):
@@ -101,14 +86,11 @@ def main(argv):
 
         #tests = [("aaa", False), ("accc", True)]
 
-        parsed = parse_text_file(argv[0])
+        machine = parse_text_file(argv[0])
 
-        if not parsed:
+        if machine is None:
             print "Process Terminated: Could not parse autonama file"
             return
-
-        machine = StateMachine(
-            parsed["start"], parsed["success"], parsed["terminal"], parsed["transitions"])
 
         for string in argv[1:]:
             (result, steps) = machine.evaluate(string)

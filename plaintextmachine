@@ -1,0 +1,7 @@
+START 0
+SUCCESS 2, 3
+RULES
+# 0 : a : 2
+# 0 : b : 3
+# 0 : c : 1
+ENDRULES
