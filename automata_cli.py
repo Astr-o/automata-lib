@@ -1,7 +1,7 @@
 import sys
 import json
-from statemachine import Step, StateMachine, FSADescription
-from fsaparsers import PlainTextParser, SyntexException
+from lib.statemachine import Step, StateMachine, FSADescription
+from lib.fsaparsers import PlainTextParser, SyntexException
 
 
 def print_usage():
