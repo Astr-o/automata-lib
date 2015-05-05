@@ -1,7 +1,7 @@
 import sys
 import json
-from statemachine import Step, StateMachine, PlainTextParser, SyntexException
-
+from statemachine import Step, StateMachine, FSADescription
+from fsaparsers import PlainTextParser, SyntexException
 
 
 def print_usage():
@@ -110,7 +110,9 @@ def main(argv):
 
         #tests = [("aaa", False), ("accc", True)]
 
-        machine = parse_text_file(filepath)
+        description = parse_text_file(filepath)
+
+        machine = StateMachine(description)
 
         if machine is None:
             print "Process Terminated: Could not parse autonama file"
