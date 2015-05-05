@@ -10,16 +10,15 @@ def print_usage():
 def print_horizontal_border():
     print "#"*70
 
-def print_machine_description(name, start, success, transitions, states=None, terminal_states=None):
+def print_machine_description(name, description):
+    fsa = description
     print_horizontal_border()
     print " MACHINE:         %s " % (str(name),)
-    print " START STATE:     %s " % (str(start),)
-    print " ACCEPTOR STATES: %s " % (str(success),)
-    print " TRANSITIONS:     %s " % (str(transitions),)
-    if states is not None:
-        print " STATES:          %s " % (str(states),)
-    if terminal_states is not None:
-        print " TERMINAL STATES: %s " % (str(terminal_states),)  
+    print " START STATE:     %s " % (str(fsa.start),)
+    print " ACCEPTOR STATES: %s " % (str(fsa.success),)
+    print " TRANSITIONS:     %s " % (str(fsa.transitions),)
+    print " STATES:          %s " % (str(fsa.states),)
+    print " TERMINAL STATES: %s " % (str(fsa.terminal_states),)  
     print_horizontal_border()
 
 
@@ -117,8 +116,7 @@ def main(argv):
             print "Process Terminated: Could not parse autonama file"
             return
 
-        print_machine_description(
-            filepath, machine.start, machine.success, machine.transitions, machine.states, machine.terminal_states)
+        print_machine_description(filepath, machine.fsa)
 
         for string in argv[1:]:
             (result, final_state, steps) = machine.evaluate(string)

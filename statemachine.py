@@ -116,7 +116,9 @@ class PlainTextParser(object):
         for (token_type, content_string) in tokens:
             self.parser_dict[str(token_type)](str(content_string))
 
-        return StateMachine(self.start, self.success, self.rules)
+        description = FSADescription(self.start, self.success, self.rules)
+
+        return StateMachine(description)
 
 
 class StateMachine(object):
@@ -129,13 +131,58 @@ class StateMachine(object):
         transitions - dictionary { s1 : [(symb, s2)] }  
     """
 
+    def __init__(self, description):
+        #self.start = start
+        #self.success = success
+        #self.transitions = transitions
+        self.fsa = description
+        self.state = self.fsa.start
+        self.step_count = 0
+        self.steps = []
+        #self.states = self._find_states()
+        #self.terminal_states = self._find_terminal_states()
+
+    def _step(self, symbol):
+
+        init_state = self.state
+
+        possible_states = self.fsa.transitions.get(str(self.state), None)
+
+        if possible_states is not None:
+            for (transition, next_state) in possible_states:
+                if symbol == transition:
+                    self.state = next_state
+                    break
+
+        self.step_count += 1
+
+        return Step(init_state, symbol, self.state)
+
+    def evaluate(self, string):
+        ''' simulates the machine for the input string, returns Tuple (accept, [steps])
+
+            accept - is a boolean, true if the input string is accepted, false otherwise
+            [steps] - list of step objects, representing machine state changes while excuting the string.
+        '''
+        self.steps = []
+        self.step_count = 0
+        self.state = self.fsa.start
+
+        for symbol in list(string):
+            step_result = self._step(symbol)
+            self.steps.append(step_result)
+
+        if self.state in self.fsa.success:
+            return (True, self.state, self.steps)
+        else:
+            return (False, self.state, self.steps)
+
+
+class FSADescription(object):
     def __init__(self, start, success, transitions):
         self.start = start
         self.success = success
         self.transitions = transitions
-        self.state = start
-        self.step_count = 0
-        self.steps = []
         self.states = self._find_states()
         self.terminal_states = self._find_terminal_states()
 
@@ -161,41 +208,6 @@ class StateMachine(object):
 
         return terminal_states
 
-
-    def _step(self, symbol):
-
-        init_state = self.state
-
-        possible_states = self.transitions.get(str(self.state), None)
-
-        if possible_states is not None:
-            for (transition, next_state) in possible_states:
-                if symbol == transition:
-                    self.state = next_state
-                    break
-
-        self.step_count += 1
-
-        return Step(init_state, symbol, self.state)
-
-    def evaluate(self, string):
-        ''' simulates the machine for the input string, returns Tuple (accept, [steps])
-
-            accept - is a boolean, true if the input string is accepted, false otherwise
-            [steps] - list of step objects, representing machine state changes while excuting the string.
-        '''
-        self.steps = []
-        self.step_count = 0
-        self.state = self.start
-
-        for symbol in list(string):
-            step_result = self._step(symbol)
-            self.steps.append(step_result)
-
-        if self.state in self.success:
-            return (True, self.state, self.steps)
-        else:
-            return (False, self.state, self.steps)
 
 
 class Step(object):
