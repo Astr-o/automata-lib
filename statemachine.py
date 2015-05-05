@@ -80,10 +80,12 @@ class PlainTextParser(object):
         self.rules = None
 
     def parse(self, string):
+        self._reset_state()
 
         self.rules = {}
 
         tokens = []
+        valid_types = self.parser_dict.keys()
 
         lines = string.splitlines()
         for (line_number, line) in enumerate(lines):
@@ -94,6 +96,7 @@ class PlainTextParser(object):
 
             type_string = strings[0].upper()
 
+            # case where there is only one token in the line
             if len(strings) == 1:
                 content_string = ""
             else:
@@ -102,7 +105,7 @@ class PlainTextParser(object):
             # print "Parsing: %s" % (line,)
             # print "(%s,%s)" % (type_string, content_string)
 
-            if (type_string in self.parser_dict.keys()):
+            if (type_string in valid_types):
                 tokens.append((type_string, content_string))
             else:
                 # If unknown line type, raise exception and return None.
@@ -134,6 +137,7 @@ class StateMachine(object):
         self.step_count = 0
         self.steps = []
         self.states = self._find_states()
+        self.terminal_states = self._find_terminal_states()
 
     def _find_states(self):
         states = set([])
@@ -148,6 +152,15 @@ class StateMachine(object):
                 states.add(next_state)
 
         return states
+
+    def _find_terminal_states(self):
+        terminal_states = set([])
+        for state in self.states:
+            if self.transitions.get(state, None) is None:
+                terminal_states.add(state)
+
+        return terminal_states
+
 
     def _step(self, symbol):
 

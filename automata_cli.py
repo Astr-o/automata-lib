@@ -7,6 +7,36 @@ from statemachine import Step, StateMachine, PlainTextParser, SyntexException
 def print_usage():
     print "python statemachine.py [filename] [strings]"
 
+def print_horizontal_border():
+    print "#"*70
+
+def print_machine_description(name, start, success, transitions, states=None, terminal_states=None):
+    print_horizontal_border()
+    print " MACHINE:         %s " % (str(name),)
+    print " START STATE:     %s " % (str(start),)
+    print " ACCEPTOR STATES: %s " % (str(success),)
+    print " TRANSITIONS:     %s " % (str(transitions),)
+    if states is not None:
+        print " STATES:          %s " % (str(states),)
+    if terminal_states is not None:
+        print " TERMINAL STATES: %s " % (str(terminal_states),)  
+    print_horizontal_border()
+
+
+def print_results(string, steps, result, final_state):
+    if result:
+        accept = " Yes!"
+    else:
+        accept = " No!"
+
+    print_horizontal_border()
+    print " Test String:    %s " % (string,)
+    for (index, step) in enumerate(steps):
+        print "    %d %s" % (index, str(step))
+    print " Final State:    %s " % (str(final_state),)
+    print " Accept?:        %s " % (str(accept),)
+    print_horizontal_border()
+
 
 def savecsv(string, steps, result, filepath, append):
 
@@ -22,7 +52,7 @@ def savecsv(string, steps, result, filepath, append):
     f.write("Result:, %s \n" % (str(result),))
 
 
-def dump_machine(machine):
+def print_machine_json(machine):
     print(json.dumps(machine.state))
     print(json.dumps(machine.success))
     print(json.dumps(machine.terminal))
@@ -71,32 +101,6 @@ def test(tests, machine):
     print str((total - failed)) + "/" + str(total) + " Tests Passed"
 
 
-def print_machine_description(name, start, success, transitions, extended=False):
-    print "#####################################################"
-    print " MACHINE:         %s " % (str(name),)
-    print " START STATE:     %s " % (str(start),)
-    print " ACCEPTOR STATES: %s " % (str(success),)
-    print " TRANSITIONS:     %s " % (str(transitions),)
-    if extended:
-        pass
-    print "#####################################################"
-
-
-def print_results(string, steps, result, final_state):
-    if result:
-        accept = " Yes!"
-    else:
-        accept = " No!"
-
-    print "#####################################################"
-    print " Test String:    %s " % (string,)
-    for (index, step) in enumerate(steps):
-        print "    %d %s" % (index, str(step))
-    print " Final State:    %s " % (str(final_state),)
-    print " Accept?:        %s " % (str(accept),)
-    print "#####################################################"
-
-
 def main(argv):
 
     if len(argv) > 1:
@@ -114,12 +118,12 @@ def main(argv):
             return
 
         print_machine_description(
-            filepath, machine.start, machine.success, machine.transitions)
+            filepath, machine.start, machine.success, machine.transitions, machine.states, machine.terminal_states)
 
         for string in argv[1:]:
             (result, final_state, steps) = machine.evaluate(string)
             print_results(string, steps, result, final_state)
-            savecsv(string, steps, result, "testfile.csv", True)
+            savecsv(string, steps, result, "testfile.csv", False)
         #test(tests, machine)
 
         # dump_machine(machine)

@@ -1,6 +1,7 @@
 START FirstState
-SUCCESS Wining, Not Lossing
+SUCCESS Wining, FirstState
 RULES
 # FirstState : a : Wining
 # FirstState : b : Loose
+# Wining : c : Loose
 ENDRULES
