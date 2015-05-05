@@ -40,11 +40,11 @@ To get started try
 
 ## History
 
-TODO: Write history
+
 
 ## Credits
 
-TODO: Write credits
+
 
 ## License
 
