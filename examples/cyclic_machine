@@ -1,0 +1,7 @@
+START state_1
+SUCCESS state_1
+RULES
+# state_1 : a : state_2
+# state_2 : b : state_3
+# state_3 : c : state_1
+ENDRULES

@@ -34,19 +34,28 @@ class FSAGraph(object):
 
 class Visitor(object):
 
+    # Graph traversal types
+    DFS_TRAVERSE = 0
+    BFS_TRAVERSE = 1
+
     def __init__(self):
         self.count = 0
         self.visited = set([])
 
-    def _visit(self, node):
+    def _visit(self, node, traversal=BFS_TRAVERSE):
         self._report_begin(node)
         if node in self.visited:
             result = False
         else:
-            self.count += 1
             result = True
+            self.visited.add(node)
+            self.on_visit(node)
         self._report_end(node)
         return result
+
+    def on_visit(self, node):
+        self.count += 1
+
 
     def _report_begin(self, node):
         print "Visitor %s entering  node=%s, node_id=%s, count=%d" % (type(self), node.name, node.id, self.count)
