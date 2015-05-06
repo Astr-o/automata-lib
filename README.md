@@ -3,9 +3,9 @@
 Simple finite state automata library providing:
 
 * FSA parser (*partially complete*)
-* FSA simulator 
-* FSA graph model (*early stage*)
-* Basic command line interface
+* FSA simulator (**functional**)
+* FSA graph model (*partially complete*)
+* Basic command line interface (*partially complete*)
 
 ## Installation 
 
