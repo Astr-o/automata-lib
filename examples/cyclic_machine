@@ -4,4 +4,6 @@ RULES
 # state_1 : a : state_2
 # state_2 : b : state_3
 # state_3 : c : state_1
+# state_2 : d : state_4
+# state_4 : d : state_2
 ENDRULES

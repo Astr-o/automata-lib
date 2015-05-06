@@ -86,6 +86,7 @@ class Visitor(object):
 
     def report_begin(self, node):
         print "Visitor %s entering  node=%s, node_id=%s" % (type(self), node.name, node.id)
+        print "Neighbours %s " % (str(node.neighbours),)
 
     def report_end(self, node):
         print "Visitor %s exiting  node=%s, node_id=%s" % (type(self), node.name, node.id)
