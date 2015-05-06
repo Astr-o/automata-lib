@@ -2,7 +2,7 @@ import sys
 import json
 from lib.statemachine import Step, StateMachine, FSADescription
 from lib.fsaparsers import PlainTextParser, SyntexException
-from lib.fsagraph import Visitor, FSAGraph
+from lib.fsagraph import Visitor, CounterVisitor, FSAGraph
 
 
 def print_usage():
@@ -116,7 +116,7 @@ def main(argv):
         machine = StateMachine(description)
         graph = FSAGraph(description)
 
-        node_counter = Visitor()
+        node_counter = CounterVisitor(True)
 
         graph.accept_visitor(node_counter)
 
