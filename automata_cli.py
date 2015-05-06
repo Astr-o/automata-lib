@@ -2,6 +2,7 @@ import sys
 import json
 from lib.statemachine import Step, StateMachine, FSADescription
 from lib.fsaparsers import PlainTextParser, SyntexException
+from lib.fsagraph import Visitor, FSAGraph
 
 
 def print_usage():
@@ -113,6 +114,11 @@ def main(argv):
         description = parse_text_file(filepath)
 
         machine = StateMachine(description)
+        graph = FSAGraph(description)
+
+        node_counter = Visitor()
+
+        graph.accept_visitor(node_counter)
 
         if machine is None:
             print "Process Terminated: Could not parse autonama file"

@@ -36,6 +36,7 @@ class PlainTextParser(object):
     TYPE_BEGIN_RULES = "RULES"
     TYPE_RULE = "#"
     TYPE_END_RULES = "ENDRULES"
+    TYPE_CUNT = "CUNT"
 
     # Parser States
     TOP_LEVEL = 0
@@ -52,6 +53,8 @@ class PlainTextParser(object):
             PlainTextParser.TYPE_RULE:          self._parse_rule,
             PlainTextParser.TYPE_END_RULES:     self._parse_end_rules,
         }
+
+
 
     def _parse_start(self, string):
         self.start = string

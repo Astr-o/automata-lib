@@ -86,6 +86,9 @@ class FSADescription(object):
 
         return terminal_states
 
+    def __str__(self):
+        return "FSADescription: {start=%s, success=%s, transitions=%s}" % (self.start, self.success, self.transitions)
+
 class Step(object):
 
     ''' 
